@@ -141,7 +141,10 @@ class MainActivity : Activity() {
             startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName")))
         }, 8)
         add(root, tile("■  ENCERRAR SERVIÇO", "Remover a camada de cor", pink) { toggle.isChecked = false }, 0)
-        val scroll = ScrollView(this).apply { fillViewport = true; addView(root) }
+        
+val scroll = ScrollView(this).apply {
+    isFillViewport = true
+    addView(root)
         setContentView(scroll)
         status.text = if (prefs.getBoolean("enabled", false)) "● FILTRO CONFIGURADO" else "● SOBREPOSIÇÃO DESATIVADA"
     }
