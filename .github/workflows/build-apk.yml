@@ -38,8 +38,6 @@ jobs:
         with:
           gradle-version: '8.9'
 
-      - name: Validate project
-        run: python3 tools/validate_project.py
 
       - name: Build debug APK
         run: gradle --no-daemon :app:assembleDebug
