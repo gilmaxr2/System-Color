@@ -145,6 +145,7 @@ class MainActivity : Activity() {
 val scroll = ScrollView(this).apply {
     isFillViewport = true
     addView(root)
+ }
 
         setContentView(scroll)
         status.text = if (prefs.getBoolean("enabled", false)) "● FILTRO CONFIGURADO" else "● SOBREPOSIÇÃO DESATIVADA"
