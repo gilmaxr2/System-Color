@@ -71,6 +71,9 @@ class MainActivity : Activity() {
                 status.text = if (checked) "● SOBREPOSIÇÃO ATIVADA" else "● SOBREPOSIÇÃO DESATIVADA"
             }
         }
+        add(root, tile("⚙ CONFIGURAÇÕES", "Temas, transparência, tutorial e desenvolvedor", cyan) {
+            startActivity(Intent(this, SettingsActivity::class.java))
+        }, 16)
         add(root, text("PERFIS", 23f, Color.WHITE, true), 10)
         add(root, tile("🎮  JOGOS", "Camada fria para sessões de jogos", cyan) { applyColor(Color.rgb(65, 145, 255)) }, 8)
         add(root, tile("▶  VÍDEOS", "Tonalidade quente para filmes e YouTube", pink) { applyColor(Color.rgb(255, 155, 70)) }, 8)

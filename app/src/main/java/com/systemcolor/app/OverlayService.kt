@@ -91,7 +91,10 @@ class OverlayService : Service() {
         currentColor = prefs.getInt("color", currentColor)
         intensity = prefs.getInt("intensity", intensity).coerceIn(0, 75)
         enabled = prefs.getBoolean("enabled", false)
-        if (intent?.action == "com.systemcolor.app.UPDATE") renderTint()
+        if (intent?.action == "com.systemcolor.app.UPDATE") {
+            syncBubble()
+            renderTint()
+        }
         return START_NOT_STICKY
     }
 
@@ -107,7 +110,7 @@ class OverlayService : Service() {
         try {
             createTint()
             handler.post(monitor)
-            // Menu flutuante desativado por padrão; controle na tela principal.
+            syncBubble()
         } catch (e: Exception) {
             stopSelf()
         }
@@ -136,6 +139,20 @@ class OverlayService : Service() {
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or
             WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS))
+    }
+
+    private fun syncBubble() {
+        if (!::wm.isInitialized) return
+        val show = prefs.getBoolean("bubble_enabled", false)
+        if (show && bubble == null) createBubble()
+        if (!show) {
+            hidePanel()
+            bubble?.let { try { wm.removeView(it) } catch (_: Exception) {} }
+            bubble = null
+        }
+        val alpha = (100 - prefs.getInt("menu_transparency", 35).coerceIn(0, 90)) / 100f
+        bubble?.alpha = alpha
+        panel?.alpha = alpha
     }
 
     private fun createBubble() {
@@ -266,7 +283,10 @@ class OverlayService : Service() {
             x = ((resources.displayMetrics.widthPixels - width) / 2).coerceAtLeast(0)
             y = dp(65)
         }
-        try { wm.addView(container, p); panel = container } catch (_: Exception) { panel = null }
+        try {
+            container.alpha = (100 - prefs.getInt("menu_transparency", 35).coerceIn(0, 90)) / 100f
+            wm.addView(container, p); panel = container
+        } catch (_: Exception) { panel = null }
     }
 
     private fun hidePanel() {
