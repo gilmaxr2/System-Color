@@ -96,7 +96,7 @@ class MainActivity : Activity() {
         window.statusBarColor = background
         window.navigationBarColor = background
         val root = column().apply {
-            setBackgroundColor(background)
+            setBackgroundColor(this@MainActivity.background)
             setPadding(dp(16), dp(16), dp(16), dp(28))
         }
         val header = row()
